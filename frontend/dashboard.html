@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LungScan AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .auth-logo i {
+            color: #4facfe;
+            font-size: 32px;
+        }
+
+        .welcome-section h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e8ecef;
+        }
+
+        .btn-secondary:hover {
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card.total-scans .stat-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .stat-card.completed .stat-icon {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .stat-card.processing .stat-icon {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .stat-card.detected .stat-icon {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .scans-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .scan-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .scans-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .scans-table th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            border-bottom: 2px solid #e8ecef;
+        }
+
+        .scans-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e8ecef;
+        }
+
+        .scans-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .condition-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .condition-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .condition-pneumonia {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .condition-covid {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .condition-tuberculosis {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .condition-analyzing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .processing-text {
+            color: #666;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            color: #666;
+            z-index: 2;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: #4facfe;
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 2px dashed #e8ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .file-input-label:hover {
+            border-color: #4facfe;
+            background: #e3f2fd;
+        }
+
+        .file-input-label.has-file {
+            border-color: #2ecc71;
+            background: #d4edda;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* Report Modal */
+        .report-modal .modal-content {
+            max-width: 800px;
+        }
+
+        .report-content {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .report-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e8ecef;
+        }
+
+        .report-section:last-child {
+            border-bottom: none;
+        }
+
+        .report-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .confidence-meter {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .confidence-value {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .confidence-high { color: #2ecc71; }
+        .confidence-medium { color: #f39c12; }
+        .confidence-low { color: #e74c3c; }
+
+        .findings-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+            margin: 15px 0;
+        }
+
+        .recommendations-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .recommendations-list li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        .disclaimer {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #1976d2;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            animation: slideInRight 0.3s ease;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .scan-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .scans-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="logo-section">
+                <div class="auth-logo">
+                    <i class="fas fa-lungs"></i>
+                    <span>LungScan AI</span>
+                </div>
+            </div>
+            <div class="welcome-section">
+                <h1>Welcome to Your Dashboard</h1>
+                <p>Manage and analyze lung CT scans with AI-powered insights</p>
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-primary" onclick="openUploadModal()">
+                    <i class="fas fa-upload"></i> Upload CT Scan
+                </button>
+                <button class="btn btn-secondary" onclick="addPatient()">
+                    <i class="fas fa-user-plus"></i> Add Patient
+                </button>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-cards">
+            <div class="stat-card total-scans">
+                <div class="stat-icon">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <div class="stat-number" id="totalScans">0</div>
+                <div class="stat-label">Total Scans</div>
+            </div>
+            <div class="stat-card completed">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-number" id="completedScans">0</div>
+                <div class="stat-label">Completed Analysis</div>
+            </div>
+            <div class="stat-card processing">
+                <div class="stat-icon">
+                    <i class="fas fa-spinner"></i>
+                </div>
+                <div class="stat-number" id="processingScans">0</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-card detected">
+                <div class="stat-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-number" id="detectedScans">0</div>
+                <div class="stat-label">Conditions Detected</div>
+            </div>
+        </div>
+
+        <!-- Scans Section -->
+        <div class="scans-section">
+            <div class="section-header">
+                <h2>Recent Scans</h2>
+                <div class="scan-actions">
+                    <button class="btn btn-primary" onclick="openUploadModal()">
+                        <i class="fas fa-upload"></i> Upload New Scan
+                    </button>
+                    <button class="btn btn-secondary" onclick="refreshScans()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <table class="scans-table">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Patient Name</th>
+                        <th>Scan Date</th>
+                        <th>Condition</th>
+                        <th>Confidence</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="scansTableBody">
+                    <!-- Scans will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Upload Modal -->
+        <div id="uploadModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Upload CT Scan</h2>
+                    <button class="close-modal" onclick="closeUploadModal()">&times;</button>
+                </div>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label for="patientName">Patient Name</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="patientName" name="patientName" required placeholder="Enter patient name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ctScanFile">CT Scan Image</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="ctScanFile" name="ctScanFile" accept="image/*,.dcm" required>
+                            <label for="ctScanFile" class="file-input-label" id="fileInputLabel">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Choose CT Scan Image (JPG, PNG, DICOM)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload"></i> Upload & Analyze
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Report Modal -->
+        <div id="reportModal" class="modal report-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Scan Report</h2>
+                    <button class="close-modal" onclick="closeReportModal()">&times;</button>
+                </div>
+                <div class="report-content" id="reportContent">
+                    <!-- Report content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock backend simulation
+        const MockBackend = {
+            scans: [
+                {
+                    id: "SCN001",
+                    patient_id: "PT001",
+                    patient_name: "John Doe",
+                    scan_date: "2025-01-15",
+                    condition: "Normal",
+                    confidence: 95,
+                    status: "Completed"
+                },
+                {
+                    id: "SCN002",
+                    patient_id: "PT002",
+                    patient_name: "Jane Smith",
+                    scan_date: "2025-01-14",
+                    condition: "Pneumonia",
+                    confidence: 87,
+                    status: "Completed"
+                },
+                {
+                    id: "SCN003",
+                    patient_id: "PT003",
+                    patient_name: "Robert Johnson",
+                    scan_date: "2025-01-16",
+                    condition: "Analyzing...",
+                    confidence: 0,
+                    status: "Processing"
+                },
+                {
+                    id: "SCN004",
+                    patient_id: "PT004",
+                    patient_name: "Rohit",
+                    scan_date: "2025-11-13",
+                    condition: "Analyzing...",
+                    confidence: 0,
+                    status: "Processing"
+                }
+            ],
+
+            reports: {
+                "SCN001": {
+                    scan_id: "SCN001",
+                    patient_name: "John Doe",
+                    scan_date: "2025-01-15",
+                    condition: "Normal",
+                    confidence: 95,
+                    findings: "No significant abnormalities detected in the lung parenchyma. The lung fields appear clear with normal bronchovascular markings. No evidence of consolidation, nodules, or pleural effusion.",
+                    recommendations: [
+                        "Routine follow-up as per standard care guidelines",
+                        "Maintain healthy lifestyle with regular exercise",
+                        "No specific medical intervention required at this time"
+                    ],
+                    generated_at: "2025-01-15T14:30:00Z"
+                },
+                "SCN002": {
+                    scan_id: "SCN002",
+                    patient_name: "Jane Smith",
+                    scan_date: "2025-01-14",
+                    condition: "Pneumonia",
+                    confidence: 87,
+                    findings: "Consolidation observed in the right lower lobe with air bronchograms. Mild pleural effusion noted. Ground-glass opacities present in the affected area consistent with bacterial pneumonia.",
+                    recommendations: [
+                        "Consult with pulmonologist for antibiotic therapy",
+                        "Follow-up chest X-ray in 2 weeks",
+                        "Monitor oxygen saturation levels",
+                        "Consider hospitalization if symptoms worsen"
+                    ],
+                    generated_at: "2025-01-14T16:45:00Z"
+                }
+            },
+
+            // Simulate API calls with delays
+            async getScans() {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return { scans: this.scans };
+            },
+
+            async uploadScan(formData) {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulate AI analysis
+                const conditions = ["Normal", "Pneumonia", "COVID-19", "Tuberculosis"];
+                const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+                const confidence = randomCondition === "Normal" ? 
+                    Math.floor(Math.random() * 10) + 90 : 
+                    Math.floor(Math.random() * 15) + 75;
+                
+                const newScan = {
+                    id: `SCN${String(this.scans.length + 1).padStart(3, '0')}`,
+                    patient_id: `PT${String(this.scans.length + 1).padStart(3, '0')}`,
+                    patient_name: formData.get('patient_name') || "Unknown Patient",
+                    scan_date: new Date().toISOString().split('T')[0],
+                    condition: randomCondition,
+                    confidence: confidence,
+                    status: "Completed"
+                };
+
+                // Also create a report for the new scan
+                this.reports[newScan.id] = {
+                    scan_id: newScan.id,
+                    patient_name: newScan.patient_name,
+                    scan_date: newScan.scan_date,
+                    condition: newScan.condition,
+                    confidence: newScan.confidence,
+                    findings: this.generateFindings(newScan.condition),
+                    recommendations: this.generateRecommendations(newScan.condition),
+                    generated_at: new Date().toISOString()
+                };
+
+                this.scans.unshift(newScan);
+                return { success: true, scan: newScan };
+            },
+
+            async getReport(scanId) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return this.reports[scanId] || null;
+            },
+
+            generateFindings(condition) {
+                const findings = {
+                    "Normal": "No significant abnormalities detected in the lung parenchyma. The lung fields appear clear with normal bronchovascular markings. No evidence of consolidation, nodules, or pleural effusion.",
+                    "Pneumonia": "Consolidation observed in the right lower lobe with air bronchograms. Mild pleural effusion noted. Ground-glass opacities present in the affected area consistent with bacterial pneumonia.",
+                    "COVID-19": "Bilateral multifocal ground-glass opacities with peripheral distribution. Crazy-paving pattern observed in some areas. Findings are consistent with COVID-19 pneumonia.",
+                    "Tuberculosis": "Cavitary lesions noted in the upper lobes with surrounding tree-in-bud opacities. Hilar lymphadenopathy present. Findings suggestive of active pulmonary tuberculosis."
+                };
+                return findings[condition] || "Analysis completed. Please consult with a radiologist for detailed findings.";
+            },
+
+            generateRecommendations(condition) {
+                const recommendations = {
+                    "Normal": [
+                        "Routine follow-up as per standard care guidelines",
+                        "Maintain healthy lifestyle with regular exercise",
+                        "No specific medical intervention required at this time"
+                    ],
+                    "Pneumonia": [
+                        "Consult with pulmonologist for antibiotic therapy",
+                        "Follow-up chest X-ray in 2 weeks",
+                        "Monitor oxygen saturation levels",
+                        "Consider hospitalization if symptoms worsen"
+                    ],
+                    "COVID-19": [
+                        "Isolate according to current health guidelines",
+                        "Monitor oxygen saturation regularly",
+                        "Seek emergency care if shortness of breath develops",
+                        "Follow up with primary care physician"
+                    ],
+                    "Tuberculosis": [
+                        "Immediate consultation with infectious disease specialist",
+                        "Initiate anti-tuberculosis therapy",
+                        "Contact tracing and testing of close contacts",
+                        "Follow-up CT scan in 2 months"
+                    ]
+                };
+                return recommendations[condition] || ["Consult with healthcare provider for appropriate follow-up."];
+            }
+        };
+
+        // Check if user is authenticated
+        function checkAuth() {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!token || !userData) {
+                alert('Please login first');
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Load everything on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAuth()) {
+                loadScans();
+                setupEventListeners();
+            }
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // File input change listener
+            document.getElementById('ctScanFile').addEventListener('change', function(e) {
+                const fileLabel = document.getElementById('fileInputLabel');
+                if (this.files.length > 0) {
+                    fileLabel.classList.add('has-file');
+                    fileLabel.innerHTML = `<i class="fas fa-check-circle"></i> <span>${this.files[0].name}</span>`;
+                } else {
+                    fileLabel.classList.remove('has-file');
+                    fileLabel.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> <span>Choose CT Scan Image (JPG, PNG, DICOM)</span>`;
+                }
+            });
+            
+            // Upload form submission
+            document.getElementById('uploadForm').addEventListener('submit', handleUpload);
+        }
+
+        // Load scans
+        async function loadScans() {
+            try {
+                showToast('Loading scans...', 'warning');
+                const data = await MockBackend.getScans();
+                displayScans(data.scans);
+                updateStatistics(data.scans);
+                showToast('Scans loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error loading scans:', error);
+                showToast('Failed to load scans', 'error');
+            }
+        }
+
+        // Update statistics cards
+        function updateStatistics(scans) {
+            const totalScans = scans.length;
+            const completedScans = scans.filter(scan => scan.status === 'Completed').length;
+            const processingScans = scans.filter(scan => scan.status === 'Processing').length;
+            const detectedScans = scans.filter(scan => scan.condition !== 'Normal' && scan.condition !== 'Analyzing...').length;
+            
+            // Animate numbers
+            animateValue('totalScans', 0, totalScans, 1000);
+            animateValue('completedScans', 0, completedScans, 1000);
+            animateValue('processingScans', 0, processingScans, 1000);
+            animateValue('detectedScans', 0, detectedScans, 1000);
+        }
+
+        // Animate number counting
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = value;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Display scans in table
+        function displayScans(scans) {
+            const tbody = document.getElementById('scansTableBody');
+            tbody.innerHTML = '';
+            
+            if (scans.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px;">
+                            <i class="fas fa-folder-open" style="font-size: 48px; color: #ccc; margin-bottom: 10px;"></i>
+                            <br>
+                            <h3 style="color: #666; margin-bottom: 10px;">No scans found</h3>
+                            <p style="color: #999;">Upload your first CT scan to get started with AI analysis.</p>
+                            <button class="btn btn-primary" onclick="openUploadModal()" style="margin-top: 15px;">
+                                <i class="fas fa-upload"></i> Upload First Scan
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            scans.forEach(scan => {
+                const row = document.createElement('tr');
+                const conditionClass = getConditionClass(scan.condition);
+                const statusClass = getStatusClass(scan.status);
+                
+                row.innerHTML = `
+                    <td><strong>${scan.patient_id}</strong></td>
+                    <td>${scan.patient_name}</td>
+                    <td>${new Date(scan.scan_date).toLocaleDateString()}</td>
+                    <td>
+                        <span class="condition-badge ${conditionClass}">
+                            ${scan.condition}
+                        </span>
+                    </td>
+                    <td>
+                        ${scan.confidence > 0 ? 
+                            `<span style="font-weight: 600; color: ${getConfidenceColor(scan.confidence)}">${scan.confidence}%</span>` : 
+                            '--'
+                        }
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${scan.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${scan.status === 'Completed' ? 
+                            `<button class="btn btn-primary" onclick="viewReport('${scan.id}')" style="padding: 8px 12px; font-size: 12px;">
+                                <i class="fas fa-file-medical"></i> View Report
+                            </button>` : 
+                            `<span class="processing-text">
+                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                            </span>`
+                        }
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Helper functions for styling
+        function getConditionClass(condition) {
+            const conditionMap = {
+                'Normal': 'condition-normal',
+                'Pneumonia': 'condition-pneumonia',
+                'COVID-19': 'condition-covid',
+                'Tuberculosis': 'condition-tuberculosis',
+                'Analyzing...': 'condition-analyzing'
+            };
+            return conditionMap[condition] || 'condition-analyzing';
+        }
+
+        function getStatusClass(status) {
+            return status === 'Completed' ? 'status-completed' : 'status-processing';
+        }
+
+        function getConfidenceColor(confidence) {
+            if (confidence >= 90) return '#2ecc71';
+            if (confidence >= 80) return '#f39c12';
+            return '#e74c3c';
+        }
+
+        // Modal functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+            // Reset form
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileInputLabel').classList.remove('has-file');
+            document.getElementById('fileInputLabel').innerHTML = `<i class="fas fa-cloud-upload-alt"></i> <span>Choose CT Scan Image (JPG, PNG, DICOM)</span>`;
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+        }
+
+        // Handle upload form submission
+        async function handleUpload(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('ctScanFile');
+            const patientName = document.getElementById('patientName').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            if (!fileInput.files[0]) {
+                showToast('Please select a CT scan image file', 'error');
+                return;
+            }
+            
+            if (!patientName.trim()) {
+                showToast('Please enter patient name', 'error');
+                return;
+            }
+            
+            // Validate file type
+            const file = fileInput.files[0];
+            const validTypes = ['image/jpeg', 'image/png', 'image/dicom', 'application/dicom'];
+            if (!validTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.dcm')) {
+                showToast('Please select a valid image file (JPG, PNG, DICOM)', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('patient_name', patientName);
+                
+                const result = await MockBackend.uploadScan(formData);
+                
+                if (result.success) {
+                    showToast('✅ Scan uploaded successfully! AI analysis completed.', 'success');
+                    closeUploadModal();
+                    loadScans();
+                } else {
+                    throw new Error('Upload failed');
+                }
+                
+            } catch (error) {
+                console.error('Upload error:', error);
+                showToast('❌ Upload failed: ' + error.message, 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // View report
+        async function viewReport(scanId) {
+            try {
+                showToast('Loading report...', 'warning');
+                const report = await MockBackend.getReport(scanId);
+                
+                if (!report) {
+                    throw new Error('Report not found');
+                }
+                
+                displayReport(report);
+                showToast('Report loaded successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error loading report:', error);
+                showToast('Failed to load report: ' + error.message, 'error');
+            }
+        }
+
+        // Display report in modal
+        function displayReport(report) {
+            const confidenceClass = report.confidence >= 90 ? 'confidence-high' : 
+                                  report.confidence >= 80 ? 'confidence-medium' : 'confidence-low';
+            
+            const content = document.getElementById('reportContent');
+            content.innerHTML = `
+                <div class="report-section">
+                    <h3>Medical Report</h3>
+                    <p style="color: #666; font-size: 14px;">Generated: ${new Date(report.generated_at).toLocaleString()}</p>
+                </div>
+                
+                <div class="report-section">
+                    <h3>Patient Information</h3>
+                    <p><strong>Patient Name:</strong> ${report.patient_name}</p>
+                    <p><strong>Scan Date:</strong> ${new Date(report.scan_date).toLocaleDateString()}</p>
+                    <p><strong>Scan ID:</strong> ${report.scan_id}</p>
+                </div>
+                
+                <div class="report-section">
+                    <h3>Diagnosis</h3>
+                    <p><strong>Condition:</strong> <span class="condition-badge ${getConditionClass(report.condition)}">${report.condition}</span></p>
+                    <div class="confidence-meter">
+                        <div class="confidence-value ${confidenceClass}">${report.confidence}%</div>
+                        <p style="text-align: center; color: #666; margin: 0;">AI Confidence Level</p>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h3>Findings</h3>
+                    <div class="findings-box">
+                        <p style="margin: 0; line-height: 1.6;">${report.findings}</p>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <h3>Recommendations</h3>
+                    <div class="recommendations-list">
+                        <ul>
+                            ${report.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="disclaimer">
+                    <i class="fas fa-info-circle"></i>
+                    This report is generated by AI and should be reviewed by a qualified healthcare professional. 
+                    Always consult with medical experts for diagnosis and treatment decisions.
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="printReport()">
+                        <i class="fas fa-print"></i> Print Report
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeReportModal()">Close</button>
+                </div>
+            `;
+            
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        // Print report
+        function printReport() {
+            window.print();
+        }
+
+        // Add patient
+        function addPatient() {
+            const patientName = prompt('Enter patient name:');
+            if (!patientName) return;
+            
+            showToast(`Patient "${patientName}" added successfully!`, 'success');
+        }
+
+        // Refresh scans
+        function refreshScans() {
+            loadScans();
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+
+        // Toast notification function
+        function showToast(message, type) {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

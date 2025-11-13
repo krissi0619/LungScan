@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - LungScan AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Your existing CSS styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            display: flex;
+            max-width: 1200px;
+            width: 95%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 700px;
+        }
+
+        .auth-card {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-sidebar {
+            flex: 1;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.05)" points="0,1000 1000,0 1000,1000"/></svg>');
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 30px;
+            transition: color 0.3s ease;
+        }
+
+        .back-home:hover {
+            color: #4facfe;
+        }
+
+        .auth-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .auth-logo i {
+            color: #4facfe;
+            font-size: 32px;
+        }
+
+        .auth-header h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            color: #666;
+            z-index: 2;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .input-group input:focus {
+            border-color: #4facfe;
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        .checkbox input {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox input:checked + .checkmark {
+            background: #4facfe;
+            border-color: #4facfe;
+        }
+
+        .checkbox input:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .forgot-password {
+            color: #4facfe;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e8ecef;
+        }
+
+        .btn-secondary:hover {
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+        .auth-divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e8ecef;
+        }
+
+        .auth-divider span {
+            background: white;
+            padding: 0 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-content h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .sidebar-content p {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .sidebar-features {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 16px;
+        }
+
+        .feature i {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        /* Loading Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal-content h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .modal-content p {
+            color: #666;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast.success {
+            background: #4CAF50;
+        }
+
+        .toast.error {
+            background: #f44336;
+        }
+
+        .toast.warning {
+            background: #ff9800;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                margin: 20px;
+            }
+
+            .auth-sidebar {
+                order: -1;
+                padding: 30px 20px;
+            }
+
+            .auth-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <a href="index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Home
+                </a>
+                <div class="auth-logo">
+                    <i class="fas fa-lungs"></i>
+                    <span>LungScan AI</span>
+                </div>
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to continue</p>
+                <div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+                    <strong>Test Credentials:</strong><br>
+                    • ashshangak570@gmail.com / password123<br>
+                    • demo@lungscan.com / demo123
+                </div>
+            </div>
+
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email" value="ashshangak570@gmail.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <!-- FIXED: Changed to type="password" and added autocomplete -->
+                        <input type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password" value="password123">
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+
+                <div class="auth-divider">
+                    <span>New to LungScan AI?</span>
+                </div>
+
+                <a href="register.html" class="btn btn-secondary btn-full">
+                    <i class="fas fa-user-plus"></i>
+                    Create New Account
+                </a>
+            </form>
+
+            <div class="auth-footer">
+                <p>By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+
+        <div class="auth-sidebar">
+            <div class="sidebar-content">
+                <h2>Advanced Lung Disease Detection</h2>
+                <p>Access AI-powered analysis, detailed reports, and patient management tools.</p>
+                <div class="sidebar-features">
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure & Encrypted</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-bolt"></i>
+                        <span>Instant Results</span>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-file-medical"></i>
+                        <span>Detailed Reports</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <h3>Signing In</h3>
+            <p>Please wait while we authenticate your account...</p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const loadingModal = document.getElementById('loadingModal');
+
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:8000';
+        let useMockMode = false;
+
+        // Toggle password visibility
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Test API connection on page load
+        async function testAPIConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    console.log('✅ API connection successful');
+                    useMockMode = false;
+                    return true;
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.warn('⚠️ API connection failed, using mock mode:', error.message);
+                useMockMode = true;
+                return false;
+            }
+        }
+
+        // Mock login function
+        async function mockLogin(email, password) {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            const testUsers = {
+                'ashshangak570@gmail.com': { password: 'password123', name: 'Ash Shangak' },
+                'demo@lungscan.com': { password: 'demo123', name: 'Demo User' }
+            };
+
+            const user = testUsers[email];
+            
+            if (user && user.password === password) {
+                return {
+                    access_token: 'mock_jwt_token_' + Math.random().toString(36).substr(2, 9),
+                    user: {
+                        id: 1,
+                        email: email,
+                        name: user.name,
+                        role: 'user',
+                        created_at: new Date().toISOString()
+                    }
+                };
+            } else {
+                throw new Error('Invalid email or password');
+            }
+        }
+
+        // Real API login
+        async function realLogin(email, password) {
+            const response = await fetch(`${API_BASE_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Login failed');
+            }
+
+            return await response.json();
+        }
+
+        // Form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = passwordInput.value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            // Basic validation
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            // Show loading modal
+            loadingModal.classList.add('active');
+
+            try {
+                let data;
+
+                if (useMockMode) {
+                    console.log('🔄 Using mock authentication');
+                    data = await mockLogin(email, password);
+                } else {
+                    console.log('🔄 Using real API authentication');
+                    data = await realLogin(email, password);
+                }
+
+                // Store authentication data
+                localStorage.setItem('auth_token', data.access_token);
+                localStorage.setItem('user_data', JSON.stringify(data.user));
+                
+                if (rememberMe) {
+                    localStorage.setItem('remember_email', email);
+                } else {
+                    localStorage.removeItem('remember_email');
+                }
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                    loadingModal.classList.remove('active');
+                    showSuccess('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                }, 1000);
+                
+            } catch (error) {
+                loadingModal.classList.remove('active');
+                showError(error.message || 'Login failed. Please check your credentials.');
+            }
+        });
+
+        // Email validation
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Load remembered email
+        const rememberedEmail = localStorage.getItem('remember_email');
+        if (rememberedEmail) {
+            document.getElementById('email').value = rememberedEmail;
+            document.getElementById('rememberMe').checked = true;
+        }
+
+        // Toast notifications
+        function showError(message) {
+            showToast(message, 'error');
+        }
+
+        function showSuccess(message) {
+            showToast(message, 'success');
+        }
+
+        function showToast(message, type) {
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+
+        // Test connection when page loads
+        testAPIConnection();
+    });
+    </script>
+</body>
+</html>
