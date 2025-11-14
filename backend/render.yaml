@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: lungscan-ai-backend
+    runtime: python
+    startCommand: pip install -r requirements.txt && gunicorn app.main:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
